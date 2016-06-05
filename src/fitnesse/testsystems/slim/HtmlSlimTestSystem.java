@@ -80,19 +80,20 @@ public class HtmlSlimTestSystem extends SlimTestSystem {
     return tableScanner.toHtml(start, end);
   }
 
-  private List<SlimTable> createSlimTables(TableScanner<? extends Table> tableScanner) {
+  private List<SlimTable> createSlimTables(TableScanner<HtmlTable> tableScanner) {
     List<SlimTable> allTables = new LinkedList<>();
-    for (Table table : tableScanner)
+    for (HtmlTable table : tableScanner)
       createSlimTable(allTables, table);
 
     return allTables;
   }
 
-  private void createSlimTable(List<SlimTable> allTables, Table table) {
+  private void createSlimTable(List<SlimTable> allTables, HtmlTable table) {
     String tableId = "" + allTables.size();
     SlimTable slimTable = slimTableFactory.makeSlimTable(table, tableId, getTestContext());
     if (slimTable != null) {
       slimTable.setCustomComparatorRegistry(customComparatorRegistry);
+      slimTable.setTeardown(table.isTeardown());
       allTables.add(slimTable);
     }
   }

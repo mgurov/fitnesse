@@ -43,6 +43,7 @@ public class HtmlTable implements Table {
 
   private List<Row> rows = new ArrayList<>();
   private TableTag tableNode;
+  private boolean isTeardown;
 
   public HtmlTable(TableTag tableNode) {
     this.tableNode = tableNode;
@@ -57,6 +58,14 @@ public class HtmlTable implements Table {
 
   public TableTag getTableNode() {
     return tableNode;
+  }
+
+  public boolean isTeardown() {
+    return isTeardown;
+  }
+
+  public void setTeardown(boolean teardown) {
+    isTeardown = teardown;
   }
 
   @Override

@@ -1,0 +1,16 @@
+!define TEST_SYSTEM {slim}
+!define slim.flags {-i com.github.mgurov.StopOnException}
+!define MANUALLY_START_TEST_RUNNER_ON_DEBUG false
+
+!|Import          |
+|fitnesse.fixtures|
+|com.github.mgurov|
+
+
+|script  |!MyFaultyFixture       |
+|setFail |with a message         |
+|setValue|right after the failure|
+
+|!MyFaultyFixture                |
+|value                 |getValue?|
+|should not be executed|executed |

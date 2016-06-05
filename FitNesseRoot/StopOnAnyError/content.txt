@@ -1,0 +1,6 @@
+!contents -R2 -g -p -f -h
+
+Stop on any error, hoor!
+
+!path classes
+!path lib/*.jar

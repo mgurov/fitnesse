@@ -1,0 +1,3 @@
+|!MyFaultyFixture             |
+|value             |getValue? |
+|want my tear down!|$tornDown=|

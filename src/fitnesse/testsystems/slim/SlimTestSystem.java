@@ -127,7 +127,7 @@ public abstract class SlimTestSystem implements TestSystem {
   protected void processTable(SlimTable table) throws IOException, SyntaxError {
     List<SlimAssertion> assertions = table.getAssertions();
     Map<String, Object> instructionResults;
-    if (!stopTestCalled && !stopSuiteCalled) {
+    if (table.isTeardown() || (!stopTestCalled && !stopSuiteCalled)) {
       // Okay, if this crashes, the test system is killed.
       // We're not gonna continue here, but instead declare our test system done.
       try {

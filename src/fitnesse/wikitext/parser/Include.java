@@ -3,6 +3,8 @@ package fitnesse.wikitext.parser;
 import fitnesse.wiki.PageData;
 import fitnesse.wiki.PathParser;
 
+import java.util.Collections;
+
 public class Include extends SymbolType implements Rule, Translation {
     private static final String[] setUpSymbols = new String[] {"COLLAPSE_SETUP"};
     private static final String includeHelpOption = "-h";
@@ -87,7 +89,9 @@ public class Include extends SymbolType implements Rule, Translation {
             String collapseState = stateForOption(option, symbol);
             String title = "Included page: "
                     + translator.translate(symbol.childAt(1));
-            return Collapsible.generateHtml(collapseState, title, translator.translate(symbol.childAt(3)));
+            return Collapsible.generateHtml(collapseState, title, translator.translate(symbol.childAt(3)),
+                    option.equals("-teardown") ? Collections.singleton("teardown") : Collections.<String>emptySet()
+            );
         }
     }
 

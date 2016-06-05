@@ -11,6 +11,8 @@ import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.TagNode;
+import org.htmlparser.tags.Div;
 import org.htmlparser.tags.TableTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
@@ -43,18 +45,24 @@ public class HtmlTableScanner implements TableScanner<HtmlTable> {
   }
 
   private void scanForTables(NodeList nodes) {
+    scanForTables(nodes, false);
+  }
+
+  private void scanForTables(NodeList nodes, boolean markAsTeardown) {
     for (int i = 0; i < nodes.size(); i++) {
       Node node = nodes.elementAt(i);
       if (node instanceof TableTag) {
         TableTag tableTag = deepClone((TableTag) node);
-        tables.add(new HtmlTable(tableTag));
+        HtmlTable htmlTable = new HtmlTable(tableTag);
+        htmlTable.setTeardown(markAsTeardown);
+        tables.add(htmlTable);
         this.nodes.add(tableTag);
       } else {
         this.nodes.add(flatClone(node));
 
         NodeList children = node.getChildren();
         if (children != null) {
-          scanForTables(children);
+          scanForTables(children, markAsTeardown || isMarkedAsTeardown(node));
         }
 
         Node endNode = endTag(node);
@@ -63,6 +71,22 @@ public class HtmlTableScanner implements TableScanner<HtmlTable> {
         }
       }
     }
+  }
+
+  private static boolean isMarkedAsTeardown(Node node) {
+    if (!(node instanceof TagNode)) {
+      return false;
+    }
+    String classAttribute = ((TagNode) node).getAttribute("class");
+    if (null == classAttribute) {
+      return false;
+    }
+    for (String className : classAttribute.split(" ")) {
+      if ("teardown".equals(className)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override
